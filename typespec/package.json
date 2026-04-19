@@ -1,0 +1,16 @@
+{
+  "name": "@cal-clone/typespec",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "compile": "tsp compile .",
+    "format": "tsp format ."
+  },
+  "devDependencies": {
+    "@typespec/compiler": "^1.11.0",
+    "@typespec/http": "^1.11.0",
+    "@typespec/openapi3": "^1.11.0",
+    "@typespec/rest": "^0.81.0",
+    "@typespec/prettier-plugin-typespec": "^1.11.0"
+  }
+}
