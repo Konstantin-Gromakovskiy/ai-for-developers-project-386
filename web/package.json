@@ -1,0 +1,43 @@
+{
+  "name": "@cal-clone/web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "api:types": "openapi-typescript ../typespec/tsp-output/openapi.json -o src/shared/api/schema.d.ts",
+    "api:mock": "prism mock ../typespec/tsp-output/openapi.json",
+    "api:proxy": "prism proxy ../typespec/tsp-output/openapi.json http://localhost:3000"
+  },
+  "dependencies": {
+    "@mantine/core": "^9.0.2",
+    "@mantine/dates": "^9.0.2",
+    "@mantine/hooks": "^9.0.2",
+    "@mantine/notifications": "^9.0.2",
+    "@tanstack/react-query": "^5.99.2",
+    "luxon": "^3.7.2",
+    "next": "^16.2.4",
+    "next-intl": "^4.9.1",
+    "openapi-fetch": "^0.17.0",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "react-hook-form": "^7.73.1"
+  },
+  "devDependencies": {
+    "@stoplight/prism-cli": "^5.15.10",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^25.6.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "jsdom": "^29.0.2",
+    "msw": "^2.13.4",
+    "openapi-typescript": "^7.13.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.5"
+  }
+}
