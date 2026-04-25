@@ -1,4 +1,10 @@
+import '@mantine/core/styles.css'
+import '@mantine/dates/styles.css'
+
+import { ColorSchemeScript } from '@mantine/core'
 import { ReactNode } from 'react'
+
+import { Providers } from './providers'
 
 type RootLayoutProps = {
   children: ReactNode
@@ -11,8 +17,13 @@ export const metadata = {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en">
-      <body style={{ margin: 0 }}>{children}</body>
+    <html lang="ru">
+      <head>
+        <ColorSchemeScript defaultColorScheme="light" />
+      </head>
+      <body style={{ margin: 0, backgroundColor: '#f7f9fc' }}>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   )
 }
