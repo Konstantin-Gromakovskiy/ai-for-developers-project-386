@@ -65,12 +65,14 @@ export function PublicHeader({ activeSection }: PublicHeaderProps) {
   return (
     <Container size="xl" h="100%" px={{ base: 'md', md: 'xl' }}>
       <Group justify="space-between" h="100%" wrap="nowrap">
-        <Group gap="xs" wrap="nowrap">
-          <CalendarLogo />
-          <Text c="ink.9" fw={700} size="lg">
-            {tBrand('name')}
-          </Text>
-        </Group>
+        <Link href="/" style={{ color: 'inherit', textDecoration: 'none' }}>
+          <Group gap="xs" wrap="nowrap">
+            <CalendarLogo />
+            <Text c="ink.9" fw={700} size="lg">
+              {tBrand('name')}
+            </Text>
+          </Group>
+        </Link>
 
         <Group gap="xs" wrap="nowrap">
           {navigationItems.map((item) => {

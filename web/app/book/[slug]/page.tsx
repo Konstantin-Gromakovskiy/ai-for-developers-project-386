@@ -4,6 +4,7 @@ import Link from 'next/link'
 
 import { Button, Card, Container, Stack, Text, Title } from '@mantine/core'
 import { useTranslations } from 'next-intl'
+import { use } from 'react'
 
 import {
   getEventTypeOption,
@@ -12,18 +13,19 @@ import {
 import { PublicPageShell } from '@/src/shared/ui/public-page-shell'
 
 type BookPageProps = {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 export default function BookPage({ params }: BookPageProps) {
+  const { slug } = use(params)
   const t = useTranslations('BookPage')
   const tGuest = useTranslations('GuestPage')
-  const eventType = getEventTypeOption(params.slug)
+  const eventType = getEventTypeOption(slug)
   const eventTypeLabel = eventType
     ? tGuest(`eventTypes.${eventType.messageKey}.title`)
-    : params.slug
+    : slug
 
   return (
     <PublicPageShell activeSection="guest" background="var(--mantine-color-mist-0)">

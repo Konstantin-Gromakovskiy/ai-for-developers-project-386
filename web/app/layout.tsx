@@ -1,7 +1,7 @@
 import '@mantine/core/styles.css'
 import '@mantine/dates/styles.css'
 
-import { ColorSchemeScript } from '@mantine/core'
+import { ColorSchemeScript, mantineHtmlProps } from '@mantine/core'
 import { ReactNode } from 'react'
 
 import messages from '@/messages/ru.json'
@@ -19,7 +19,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="ru">
+    <html lang="ru" {...mantineHtmlProps}>
       <head>
         <ColorSchemeScript defaultColorScheme="light" />
       </head>
