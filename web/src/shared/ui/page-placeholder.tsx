@@ -1,4 +1,7 @@
+'use client'
+
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { ReactNode } from 'react'
 
 type NavigationLink = {
@@ -91,6 +94,8 @@ export function PagePlaceholder({
   navigation = [],
   children,
 }: PagePlaceholderProps) {
+  const t = useTranslations('PagePlaceholder')
+
   return (
     <main style={shellStyle}>
       <div style={contentStyle}>
@@ -100,7 +105,7 @@ export function PagePlaceholder({
 
         {navigation.length > 0
           ? (
-              <nav aria-label="Page navigation" style={actionsStyle}>
+              <nav aria-label={t('navigationLabel')} style={actionsStyle}>
                 {navigation.map(link => (
                   <Link key={link.href} href={link.href} style={linkStyle}>
                     {link.label}

@@ -4,6 +4,8 @@ import '@mantine/dates/styles.css'
 import { ColorSchemeScript } from '@mantine/core'
 import { ReactNode } from 'react'
 
+import messages from '@/messages/ru.json'
+
 import { Providers } from './providers'
 
 type RootLayoutProps = {
@@ -22,7 +24,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <ColorSchemeScript defaultColorScheme="light" />
       </head>
       <body style={{ margin: 0, backgroundColor: '#f7f9fc' }}>
-        <Providers>{children}</Providers>
+        <Providers locale="ru" messages={messages}>
+          {children}
+        </Providers>
       </body>
     </html>
   )
