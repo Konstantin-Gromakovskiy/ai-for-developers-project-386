@@ -1,2 +1,31 @@
+# Dependencies
 **/node_modules/
+
+# Build outputs
+**/.next/
+**/dist/
+**/coverage/
+**/.turbo/
+**/out/
+
+# Generated artifacts
 typespec/tsp-output/
+**/*.tsbuildinfo
+
+# Environment files
+**/.env
+**/.env.*
+!**/.env.example
+
+# Logs
+**/*.log
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+**/pnpm-debug.log*
+
+# OS / editor files
+**/.DS_Store
+**/Thumbs.db
+**/.idea/
+**/.vscode/
