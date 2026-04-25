@@ -1,6 +1,6 @@
 'use client'
 
-import { ActionIcon, Card, Group, NativeSelect, Stack, TextInput } from '@mantine/core'
+import { Button, Card, Group, NativeSelect, Stack, TextInput } from '@mantine/core'
 import { Controller, type Control, type FieldErrors } from 'react-hook-form'
 
 type AvailabilityRuleRowProps = {
@@ -69,18 +69,6 @@ export function AvailabilityRuleRow({
               />
             )}
           />
-
-          <ActionIcon
-            aria-label={removeLabel}
-            color="red"
-            mt={30}
-            onClick={onRemove}
-            radius="xl"
-            size="lg"
-            variant="light"
-          >
-            x
-          </ActionIcon>
         </Group>
 
         <Group align="flex-start" grow>
@@ -128,6 +116,12 @@ export function AvailabilityRuleRow({
               />
             )}
           />
+        </Group>
+
+        <Group justify="flex-end">
+          <Button color="red" onClick={onRemove} type="button" variant="light">
+            {removeLabel}
+          </Button>
         </Group>
       </Stack>
     </Card>
