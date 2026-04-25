@@ -177,8 +177,43 @@
     "availability": {
       "badge": "Admin / Availability",
       "title": "Управление weekly availability",
-      "description": "Здесь будет экран настройки базовой доступности владельца по дням недели и времени.",
-      "nextStep": "Собрать форму weekly availability и связать её с backend-контрактом."
+      "description": "Настройте timezone владельца и базовые weekly rules, из которых backend будет вычислять доступные слоты для гостевого сценария.",
+      "back": "Назад в админку",
+      "days": {
+        "monday": "Понедельник",
+        "tuesday": "Вторник",
+        "wednesday": "Среда",
+        "thursday": "Четверг",
+        "friday": "Пятница",
+        "saturday": "Суббота",
+        "sunday": "Воскресенье"
+      },
+      "form": {
+        "title": "Конфигурация доступности",
+        "description": "При сохранении текущая конфигурация recurring availability будет полностью заменена новой версией из формы.",
+        "timezoneLabel": "Timezone",
+        "timezonePlaceholder": "Например, Europe/Moscow",
+        "rulesTitle": "Weekly rules",
+        "addRule": "Добавить правило",
+        "emptyRules": "Правила доступности пока не добавлены.",
+        "dayLabel": "День недели",
+        "startTimeLabel": "Начало",
+        "startTimePlaceholder": "09:00",
+        "endTimeLabel": "Окончание",
+        "endTimePlaceholder": "18:00",
+        "removeRule": "Удалить правило",
+        "submit": "Сохранить конфигурацию"
+      },
+      "validation": {
+        "timezoneRequired": "Укажите timezone",
+        "ruleRequired": "Заполните поле",
+        "invalidRange": "Время окончания должно быть позже времени начала"
+      },
+      "errors": {
+        "loadTitle": "Не удалось загрузить availability",
+        "loadDescription": "Проверьте доступность API и повторите попытку.",
+        "submitTitle": "Не удалось сохранить availability"
+      }
     },
     "overrides": {
       "badge": "Admin / Overrides",
