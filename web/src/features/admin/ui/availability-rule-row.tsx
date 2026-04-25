@@ -53,7 +53,7 @@ export function AvailabilityRuleRow({
   return (
     <Card bg="mist.1" padding="md" shadow="none" withBorder={false}>
       <Stack gap="md">
-        <Group align="flex-start" grow>
+        <Group align="flex-start" grow wrap="wrap">
           <Controller
             control={control}
             name={`weeklyRules.${index}.dayOfWeek`}
@@ -63,15 +63,15 @@ export function AvailabilityRuleRow({
                 data={dayOptions}
                 error={ruleError?.dayOfWeek?.message}
                 label={dayLabel}
+                flex={1}
+                miw={{ base: '100%', md: 180 }}
                 onBlur={field.onBlur}
                 onChange={field.onChange}
                 value={field.value}
               />
             )}
           />
-        </Group>
 
-        <Group align="flex-start" grow>
           <Controller
             control={control}
             name={`weeklyRules.${index}.startLocalTime`}
@@ -79,7 +79,9 @@ export function AvailabilityRuleRow({
             render={({ field }) => (
               <TextInput
                 error={ruleError?.startLocalTime?.message}
+                flex={1}
                 label={startLabel}
+                miw={{ base: '100%', md: 160 }}
                 onBlur={field.onBlur}
                 onChange={field.onChange}
                 placeholder={startPlaceholder}
@@ -107,7 +109,9 @@ export function AvailabilityRuleRow({
             render={({ field }) => (
               <TextInput
                 error={ruleError?.endLocalTime?.message}
+                flex={1}
                 label={endLabel}
+                miw={{ base: '100%', md: 160 }}
                 onBlur={field.onBlur}
                 onChange={field.onChange}
                 placeholder={endPlaceholder}
