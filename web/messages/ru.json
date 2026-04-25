@@ -218,8 +218,46 @@
     "overrides": {
       "badge": "Admin / Overrides",
       "title": "Управление overrides",
-      "description": "Здесь будет экран для управления отдельными исключениями в расписании владельца по конкретным датам.",
-      "nextStep": "Добавить календарный интерфейс для overrides и операции создания/обновления/удаления."
+      "description": "Создавайте отдельные исключения в расписании владельца для конкретных интервалов UTC: можно как открыть дополнительную доступность, так и заблокировать слот.",
+      "back": "Назад в админку",
+      "deleteConfirm": "Удалить override?",
+      "status": {
+        "available": "Доступно",
+        "blocked": "Заблокировано"
+      },
+      "form": {
+        "startLabel": "Начало интервала",
+        "startPlaceholder": "Выберите дату и время начала",
+        "endLabel": "Окончание интервала",
+        "endPlaceholder": "Выберите дату и время окончания",
+        "statusLabel": "Сделать интервал доступным"
+      },
+      "validation": {
+        "required": "Заполните поле",
+        "invalidRange": "Окончание интервала должно быть позже начала"
+      },
+      "create": {
+        "title": "Создать override",
+        "description": "Новый override добавит исключение поверх recurring availability и сразу повлияет на вычисление слотов.",
+        "submit": "Создать"
+      },
+      "edit": {
+        "title": "Редактировать override",
+        "submit": "Сохранить изменения",
+        "cancel": "Отмена"
+      },
+      "list": {
+        "title": "Текущие overrides",
+        "description": "Список загружается из admin API и показывает конкретные UTC-интервалы, которые переопределяют обычную weekly availability.",
+        "empty": "Overrides пока не созданы.",
+        "edit": "Редактировать",
+        "delete": "Удалить"
+      },
+      "errors": {
+        "loadTitle": "Не удалось загрузить overrides",
+        "loadDescription": "Проверьте доступность API и повторите попытку.",
+        "submitTitle": "Не удалось сохранить override"
+      }
     },
     "bookings": {
       "badge": "Admin / Bookings",
