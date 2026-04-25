@@ -11,8 +11,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "api:types": "openapi-typescript ../typespec/tsp-output/openapi.json -o src/shared/api/schema.d.ts",
-    "api:mock": "prism mock ../typespec/tsp-output/openapi.json",
-    "api:proxy": "prism proxy ../typespec/tsp-output/openapi.json http://localhost:3000"
+    "api:mock": "prism mock ../typespec/tsp-output/openapi.json --port 4010",
+    "api:proxy": "node ./scripts/run-prism-proxy.mjs"
   },
   "dependencies": {
     "@mantine/core": "^9.0.2",
