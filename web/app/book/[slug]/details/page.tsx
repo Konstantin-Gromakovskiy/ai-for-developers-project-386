@@ -1,5 +1,6 @@
 'use client'
 
+import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
@@ -7,8 +8,9 @@ import { use } from 'react'
 
 import { Button, Card, Container, Stack, Text, Title } from '@mantine/core'
 
-import { getEventTypeOption } from '@/src/entities/event-type/model/event-types'
 import { formatSelectedDate } from '@/src/features/booking/lib/format-booking'
+import { getPublicEventType } from '@/src/shared/api'
+import { queryKeys } from '@/src/shared/api/query-keys'
 import { PublicPageShell } from '@/src/shared/ui/public-page-shell'
 
 type BookDetailsPageProps = {
@@ -21,13 +23,13 @@ export default function BookDetailsPage({ params }: BookDetailsPageProps) {
   const { slug } = use(params)
   const searchParams = useSearchParams()
   const t = useTranslations('BookDetailsPage')
-  const tGuest = useTranslations('GuestPage')
   const selectedDate = searchParams.get('date')
   const selectedTime = searchParams.get('time')
-  const eventType = getEventTypeOption(slug)
-  const eventTypeLabel = eventType
-    ? tGuest(`eventTypes.${eventType.messageKey}.title`)
-    : slug
+  const eventTypeQuery = useQuery({
+    queryKey: queryKeys.publicEventType(slug),
+    queryFn: () => getPublicEventType(slug),
+  })
+  const eventTypeLabel = eventTypeQuery.data?.title ?? slug
 
   return (
     <PublicPageShell activeSection="guest" background="var(--mantine-color-mist-0)">

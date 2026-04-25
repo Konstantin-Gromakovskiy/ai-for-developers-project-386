@@ -2,12 +2,14 @@
 
 import 'dayjs/locale/ru'
 
+import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { use, useMemo, useState } from 'react'
 
 import {
+  Alert,
   Badge,
   Button,
   Card,
@@ -20,20 +22,18 @@ import {
 } from '@mantine/core'
 import { DatePicker } from '@mantine/dates'
 
-import {
-  getEventTypeOption,
-  hostProfile,
-} from '@/src/entities/event-type/model/event-types'
+import { hostProfile } from '@/src/entities/event-type/model/event-types'
 import { HostSummary } from '@/src/entities/event-type/ui/host-summary'
-import { formatSelectedDate } from '@/src/features/booking/lib/format-booking'
 import {
-  availableDates,
-  defaultBookingMonth,
-  defaultSelectedDate,
-  slotsByDate,
-} from '@/src/features/booking/model/booking-mocks'
+  formatSelectedDate,
+  formatSlotTimeRange,
+  getLocalDateFromUtc,
+  getMonthValueFromDate,
+} from '@/src/features/booking/lib/format-booking'
 import { SelectionInfoCard } from '@/src/features/booking/ui/selection-info-card'
 import { SlotRow } from '@/src/features/booking/ui/slot-row'
+import { getPublicEventType, listEventTypeSlots } from '@/src/shared/api'
+import { queryKeys } from '@/src/shared/api/query-keys'
 import { PublicPageShell } from '@/src/shared/ui/public-page-shell'
 
 type BookPageProps = {
@@ -48,48 +48,95 @@ export default function BookPage({ params }: BookPageProps) {
   const t = useTranslations('BookPage')
   const tGuest = useTranslations('GuestPage')
   const tCommon = useTranslations('Common')
-  const eventType = getEventTypeOption(slug)
-  const eventTypeLabel = eventType
-    ? tGuest(`eventTypes.${eventType.messageKey}.title`)
-    : slug
-  const eventTypeDescription = eventType
-    ? tGuest(`eventTypes.${eventType.messageKey}.description`)
-    : t('fallbackDescription')
-  const eventTypeDuration = eventType
-    ? tGuest(`eventTypes.${eventType.messageKey}.duration`)
-    : t('fallbackDuration')
 
-  const [calendarDate, setCalendarDate] = useState(defaultBookingMonth)
-  const [selectedDate, setSelectedDate] = useState<string | null>(defaultSelectedDate)
-  const [selectedTime, setSelectedTime] = useState<string | null>(null)
+  const eventTypeQuery = useQuery({
+    queryKey: queryKeys.publicEventType(slug),
+    queryFn: () => getPublicEventType(slug),
+  })
 
-  const slots = useMemo(() => {
-    if (!selectedDate) {
-      return []
+  const slotsQuery = useQuery({
+    queryKey: queryKeys.eventTypeSlots(slug),
+    queryFn: () => listEventTypeSlots(slug),
+  })
+
+  const groupedSlots = useMemo(() => {
+    const slotGroups: Record<string, Array<{ id: string, label: string }>> = {}
+
+    for (const slot of slotsQuery.data ?? []) {
+      const localDate = getLocalDateFromUtc(slot.startUtc)
+
+      if (!localDate) {
+        continue
+      }
+
+      const slotItem = {
+        id: slot.startUtc,
+        label: formatSlotTimeRange(slot.startUtc, slot.endUtc),
+      }
+
+      if (!slotGroups[localDate]) {
+        slotGroups[localDate] = [slotItem]
+        continue
+      }
+
+      slotGroups[localDate].push(slotItem)
     }
 
-    return slotsByDate[selectedDate] ?? []
-  }, [selectedDate])
+    return slotGroups
+  }, [slotsQuery.data])
 
-  const selectedDateLabel = selectedDate
-    ? formatSelectedDate(selectedDate)
-    : t('noDate')
+  const availableDates = useMemo(
+    () => Object.keys(groupedSlots).sort((left, right) => left.localeCompare(right)),
+    [groupedSlots],
+  )
 
-  const continueDisabled = !selectedDate || !selectedTime
+  const [calendarDate, setCalendarDate] = useState<string | null>(null)
+  const [selectedDateState, setSelectedDateState] = useState<string | null>(null)
+  const [selectedTimeState, setSelectedTimeState] = useState<string | null>(null)
+
+  const selectedDate
+    = selectedDateState && availableDates.includes(selectedDateState)
+      ? selectedDateState
+      : availableDates[0] ?? null
+
+  const slots = selectedDate ? groupedSlots[selectedDate] ?? [] : []
+
+  const selectedSlot = selectedTimeState
+    ? slots.find(slot => slot.id === selectedTimeState) ?? null
+    : null
+
+  const selectedDateLabel = selectedDate ? formatSelectedDate(selectedDate) : t('noDate')
+
+  const eventTypeLabel = eventTypeQuery.data?.title ?? slug
+  const eventTypeDescription = eventTypeQuery.data?.description ?? t('fallbackDescription')
+  const eventTypeDuration = eventTypeQuery.data
+    ? t('duration', { minutes: eventTypeQuery.data.durationMinutes })
+    : t('fallbackDuration')
+
+  const visibleCalendarDate = calendarDate
+    ?? (selectedDate ? getMonthValueFromDate(selectedDate) : null)
+    ?? availableDates[0]
+    ?? null
+
+  const continueDisabled = !selectedDate || !selectedSlot
 
   function handleDateChange(value: string | null) {
-    setSelectedDate(value)
-    setSelectedTime(null)
+    setSelectedDateState(value)
+    setSelectedTimeState(null)
+
+    if (value) {
+      setCalendarDate(getMonthValueFromDate(value))
+    }
   }
 
   function handleContinue() {
-    if (!selectedDate || !selectedTime) {
+    if (!selectedDate || !selectedSlot) {
       return
     }
 
     const searchParams = new URLSearchParams({
       date: selectedDate,
-      time: selectedTime,
+      time: selectedSlot.label,
     })
 
     router.push(`/book/${slug}/details?${searchParams.toString()}`)
@@ -99,6 +146,14 @@ export default function BookPage({ params }: BookPageProps) {
     <PublicPageShell activeSection="guest" background="var(--mantine-color-mist-0)">
       <Container px={{ base: 'md', md: 'xl' }} py={{ base: 40, md: 48 }} size="xl">
         <Stack gap="xl">
+          {eventTypeQuery.isError || slotsQuery.isError
+            ? (
+                <Alert color="red" title={t('errors.loadBookingTitle')} variant="light">
+                  {t('errors.loadBookingDescription')}
+                </Alert>
+              )
+            : null}
+
           <Title c="ink.9" order={1}>
             {eventTypeLabel}
           </Title>
@@ -129,7 +184,7 @@ export default function BookPage({ params }: BookPageProps) {
 
                   <SelectionInfoCard
                     label={t('selectedTimeLabel')}
-                    value={selectedTime ?? t('noTime')}
+                    value={selectedSlot?.label ?? t('noTime')}
                   />
                 </Stack>
               </Card>
@@ -148,15 +203,15 @@ export default function BookPage({ params }: BookPageProps) {
                       nextMonth: t('nextMonth'),
                       previousMonth: t('previousMonth'),
                     }}
-                    date={calendarDate}
-                    defaultDate={defaultBookingMonth}
+                    date={visibleCalendarDate}
+                    defaultDate={visibleCalendarDate ?? undefined}
                     excludeDate={date => !availableDates.includes(date)}
                     firstDayOfWeek={1}
                     fullWidth
                     headerControlsOrder={['level', 'previous', 'next']}
                     locale="ru"
-                    maxDate="2026-04-03"
-                    minDate="2026-03-30"
+                    maxDate={availableDates.at(-1)}
+                    minDate={availableDates[0]}
                     monthLabelFormat="MMMM YYYY [г.]"
                     onChange={handleDateChange}
                     onDateChange={setCalendarDate}
@@ -201,14 +256,22 @@ export default function BookPage({ params }: BookPageProps) {
                     </Title>
 
                     <Stack gap="sm">
+                      {slots.length === 0 && !slotsQuery.isPending
+                        ? (
+                            <Text c="ink.5" fz="lg">
+                              {t('noSlots')}
+                            </Text>
+                          )
+                        : null}
+
                       {slots.map(slot => (
                         <SlotRow
-                          key={slot.time}
-                          onSelect={() => setSelectedTime(slot.time)}
-                          selected={selectedTime === slot.time}
-                          status={slot.status}
-                          statusLabel={slot.status === 'free' ? tCommon('free') : tCommon('busy')}
-                          time={slot.time}
+                          key={slot.id}
+                          onSelect={() => setSelectedTimeState(slot.id)}
+                          selected={selectedSlot?.id === slot.id}
+                          status="free"
+                          statusLabel={tCommon('free')}
+                          time={slot.label}
                         />
                       ))}
                     </Stack>

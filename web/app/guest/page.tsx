@@ -1,25 +1,25 @@
 'use client'
 
-import { Card, Container, SimpleGrid, Stack, Text, Title } from '@mantine/core'
+import { useQuery } from '@tanstack/react-query'
+import { Alert, Card, Container, SimpleGrid, Skeleton, Stack, Text, Title } from '@mantine/core'
 import { useTranslations } from 'next-intl'
 
-import {
-  eventTypeOptions,
-  hostProfile,
-} from '@/src/entities/event-type/model/event-types'
+import { hostProfile } from '@/src/entities/event-type/model/event-types'
 import { EventTypeCard } from '@/src/entities/event-type/ui/event-type-card'
 import { HostSummary } from '@/src/entities/event-type/ui/host-summary'
+import { listPublicEventTypes } from '@/src/shared/api'
+import { queryKeys } from '@/src/shared/api/query-keys'
 import { PublicPageShell } from '@/src/shared/ui/public-page-shell'
 
 export default function GuestPage() {
   const t = useTranslations('GuestPage')
   const tBrand = useTranslations('Brand')
-  const eventTypes = eventTypeOptions.map(eventType => ({
-    slug: eventType.slug,
-    title: t(`eventTypes.${eventType.messageKey}.title`),
-    description: t(`eventTypes.${eventType.messageKey}.description`),
-    durationLabel: t(`eventTypes.${eventType.messageKey}.duration`),
-  }))
+  const eventTypesQuery = useQuery({
+    queryKey: queryKeys.publicEventTypes,
+    queryFn: listPublicEventTypes,
+  })
+
+  const eventTypes = eventTypesQuery.data ?? []
 
   return (
     <PublicPageShell activeSection="guest" background="var(--mantine-color-mist-0)">
@@ -41,15 +41,37 @@ export default function GuestPage() {
           </Card>
 
           <SimpleGrid cols={{ base: 1, md: 2 }} spacing="md" verticalSpacing="md">
-            {eventTypes.map(eventType => (
-              <EventTypeCard
-                key={eventType.slug}
-                description={eventType.description}
-                durationLabel={eventType.durationLabel}
-                href={`/book/${eventType.slug}`}
-                title={eventType.title}
-              />
-            ))}
+            {eventTypesQuery.isPending
+              ? Array.from({ length: 2 }).map((_, index) => (
+                  <Card key={index} h="100%">
+                    <Stack gap="md">
+                      <Skeleton height={28} radius="md" />
+                      <Skeleton height={18} radius="md" width="85%" />
+                      <Skeleton height={18} radius="md" width="65%" />
+                    </Stack>
+                  </Card>
+                ))
+              : null}
+
+            {eventTypesQuery.isError
+              ? (
+                  <Alert color="red" title={t('errors.loadEventTypesTitle')} variant="light">
+                    {t('errors.loadEventTypesDescription')}
+                  </Alert>
+                )
+              : null}
+
+            {!eventTypesQuery.isPending && !eventTypesQuery.isError
+              ? eventTypes.map(eventType => (
+                  <EventTypeCard
+                    key={eventType.slug}
+                    description={eventType.description ?? t('emptyDescription')}
+                    durationLabel={t('duration', { minutes: eventType.durationMinutes })}
+                    href={`/book/${eventType.slug}`}
+                    title={eventType.title}
+                  />
+                ))
+              : null}
           </SimpleGrid>
         </Stack>
       </Container>

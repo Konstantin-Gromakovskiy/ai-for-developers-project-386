@@ -23,17 +23,11 @@
     "title": "Выберите тип события",
     "description": "Нажмите на карточку, чтобы открыть календарь в {productName} и выбрать удобный слот.",
     "hostRole": "Host",
-    "eventTypes": {
-      "quickCall": {
-        "title": "Встреча 15 минут",
-        "description": "Короткий тип события для быстрого слота.",
-        "duration": "15 мин"
-      },
-      "standardCall": {
-        "title": "Встреча 30 минут",
-        "description": "Базовый тип события для бронирования.",
-        "duration": "30 мин"
-      }
+    "duration": "{minutes} мин",
+    "emptyDescription": "Описание события отсутствует.",
+    "errors": {
+      "loadEventTypesTitle": "Не удалось загрузить типы событий",
+      "loadEventTypesDescription": "Проверьте, что Prism mock server или backend доступны по NEXT_PUBLIC_API_BASE_URL."
     }
   },
   "Common": {
@@ -51,8 +45,14 @@
     "continue": "Продолжить",
     "fallbackDescription": "Описание события временно недоступно.",
     "fallbackDuration": "0 мин",
+    "duration": "{minutes} мин",
     "previousMonth": "Предыдущий месяц",
-    "nextMonth": "Следующий месяц"
+    "nextMonth": "Следующий месяц",
+    "noSlots": "Для выбранной даты сейчас нет доступных слотов.",
+    "errors": {
+      "loadBookingTitle": "Не удалось загрузить данные бронирования",
+      "loadBookingDescription": "Проверьте доступность API и повторите попытку."
+    }
   },
   "BookDetailsPage": {
     "badge": "Следующий шаг",
