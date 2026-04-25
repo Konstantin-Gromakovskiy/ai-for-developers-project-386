@@ -136,6 +136,7 @@ export default function BookPage({ params }: BookPageProps) {
 
     const searchParams = new URLSearchParams({
       date: selectedDate,
+      startUtc: selectedSlot.id,
       time: selectedSlot.label,
     })
 

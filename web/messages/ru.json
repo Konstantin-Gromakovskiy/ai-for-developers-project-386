@@ -55,14 +55,47 @@
     }
   },
   "BookDetailsPage": {
-    "badge": "Следующий шаг",
-    "title": "Подтверждение выбора слота",
+    "badge": "Бронирование",
+    "title": "Заполните данные для бронирования",
     "eventType": "Тип события: {eventType}",
     "date": "Дата: {date}",
     "time": "Время: {time}",
-    "description": "Это временный placeholder следующего шага. Здесь будет форма ввода данных гостя и подтверждение бронирования.",
+    "description": "Проверьте выбранный слот и оставьте контактные данные гостя. После отправки бронирование будет создано через API.",
     "back": "Назад к календарю",
-    "none": "не выбрано"
+    "none": "не выбрано",
+    "eventTypeLabel": "Тип события",
+    "guestNameLabel": "Гость",
+    "dateLabel": "Дата",
+    "timeLabel": "Время",
+    "form": {
+      "title": "Контактные данные",
+      "guestNameLabel": "Имя",
+      "guestNamePlaceholder": "Введите ваше имя",
+      "guestEmailLabel": "Email",
+      "guestEmailPlaceholder": "name@example.com",
+      "guestNotesLabel": "Комментарий",
+      "guestNotesPlaceholder": "Дополнительная информация для владельца",
+      "submit": "Подтвердить бронирование"
+    },
+    "validation": {
+      "guestNameRequired": "Введите имя",
+      "guestEmailRequired": "Введите email",
+      "guestEmailInvalid": "Введите корректный email"
+    },
+    "errors": {
+      "missingSelectionTitle": "Слот не выбран",
+      "missingSelectionDescription": "Вернитесь на предыдущий шаг и выберите дату и время для бронирования.",
+      "loadEventTypeTitle": "Не удалось загрузить тип события",
+      "loadEventTypeDescription": "Проверьте доступность API и повторите попытку.",
+      "submitTitle": "Не удалось создать бронирование"
+    },
+    "success": {
+      "badge": "Бронирование создано",
+      "title": "Встреча успешно забронирована",
+      "description": "Ответ от API получен, слот подтверждён. Теперь можно вернуться к списку событий или забронировать ещё одну встречу.",
+      "toGuest": "К выбору событий",
+      "bookAnother": "Забронировать ещё слот"
+    }
   },
   "OwnerPage": {
     "badge": "Панель владельца",
