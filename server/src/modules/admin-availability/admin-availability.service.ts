@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common'
+import { IANAZone } from 'luxon'
 
 import { createValidationError } from '../../common/errors/api-errors'
 import type {
@@ -48,6 +49,10 @@ export class AdminAvailabilityService {
 
     if (normalizedTimezone.length === 0) {
       throw createValidationError('Availability timezone must not be empty')
+    }
+
+    if (!IANAZone.isValidZone(normalizedTimezone)) {
+      throw createValidationError('Availability timezone must be a valid IANA timezone')
     }
 
     return normalizedTimezone
