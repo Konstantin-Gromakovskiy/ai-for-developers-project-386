@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 
 import {
   createConflictError,
+  createNotFoundError,
   createValidationError,
 } from '../../common/errors/api-errors'
 import { InMemoryBookingsRepository } from '../../infrastructure/repositories/in-memory-bookings.repository'
@@ -27,7 +28,7 @@ export class PublicBookingsService {
     const eventType = this.eventTypesRepository.findActiveBySlug(slug)
 
     if (!eventType) {
-      return this.publicSlotsService.listEventTypeSlots(slug)
+      throw createNotFoundError(`Event type with slug '${slug}' was not found`)
     }
 
     const normalizedInput = this.validateInput(input)

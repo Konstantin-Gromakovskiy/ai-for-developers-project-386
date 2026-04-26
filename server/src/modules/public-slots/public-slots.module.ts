@@ -17,5 +17,6 @@ import { PublicSlotsService } from './public-slots.service'
   ],
   controllers: [PublicSlotsController],
   providers: [PublicSlotsService],
+  exports: [PublicSlotsService],
 })
 export class PublicSlotsModule {}

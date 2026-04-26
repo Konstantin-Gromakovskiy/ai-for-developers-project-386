@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common'
 
+import { AdminBookingsModule } from './modules/admin-bookings/admin-bookings.module'
 import { HealthModule } from './modules/health/health.module'
 import { AdminAvailabilityModule } from './modules/admin-availability/admin-availability.module'
 import { AdminEventTypesModule } from './modules/admin-event-types/admin-event-types.module'
@@ -15,6 +16,7 @@ import { PublicSlotsModule } from './modules/public-slots/public-slots.module'
     PublicEventTypesModule,
     PublicSlotsModule,
     PublicBookingsModule,
+    AdminBookingsModule,
     AdminEventTypesModule,
     AdminAvailabilityModule,
     AdminOverridesModule,
