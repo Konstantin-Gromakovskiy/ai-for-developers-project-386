@@ -44,4 +44,46 @@ export class InMemoryEventTypesRepository {
   findActiveBySlug(slug: string) {
     return this.eventTypes.find(eventType => eventType.isActive && eventType.slug === slug) ?? null
   }
+
+  findAll() {
+    return [...this.eventTypes]
+  }
+
+  findById(id: string) {
+    return this.eventTypes.find(eventType => eventType.id === id) ?? null
+  }
+
+  findBySlug(slug: string) {
+    return this.eventTypes.find(eventType => eventType.slug === slug) ?? null
+  }
+
+  create(eventType: EventTypeRecord) {
+    this.eventTypes.push(eventType)
+
+    return eventType
+  }
+
+  update(id: string, patch: Partial<EventTypeRecord>) {
+    const eventType = this.findById(id)
+
+    if (!eventType) {
+      return null
+    }
+
+    Object.assign(eventType, patch)
+
+    return eventType
+  }
+
+  delete(id: string) {
+    const index = this.eventTypes.findIndex(eventType => eventType.id === id)
+
+    if (index === -1) {
+      return false
+    }
+
+    this.eventTypes.splice(index, 1)
+
+    return true
+  }
 }
