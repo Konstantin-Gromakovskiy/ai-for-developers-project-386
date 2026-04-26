@@ -1,0 +1,14 @@
+.git
+.gitignore
+.idea
+draft
+
+**/node_modules
+**/.next
+**/dist
+**/coverage
+**/.turbo
+**/out
+**/*.log
+**/.env.local
+**/.DS_Store
